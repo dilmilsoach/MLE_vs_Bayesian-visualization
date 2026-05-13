@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MLE vs Bayesian Probability Density Comparison</title>
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 40px; background-color: #fcfcfc; color: #333; }
+        .control-panel { background: #f0f2f5; padding: 20px; border-radius: 8px; margin-bottom: 30px; display: flex; gap: 20px; align-items: flex-end; }
+        .form-group { display: flex; flex-direction: column; gap: 5px; }
+        select, button { padding: 10px; border-radius: 5px; border: 1px solid #ccc; font-size: 14px; }
+        button { background-color: #007bff; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #0056b3; }
+        .metrics { display: flex; gap: 40px; margin-bottom: 20px; background: #fff; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px; }
+        .metric-box { font-size: 16px; line-height: 1.5; }
+        .metric-value { font-weight: bold; }
+        .chart-box { background: white; border: 1px solid #e0e0e0; padding: 20px; border-radius: 8px; text-align: center; max-width: 1000px; margin: 0 auto; }
+        .chart-box img { max-width: 100%; height: auto; }
+    </style>
+</head>
+<body>
+
+    <h1>Framework Comparison: Probability Density Space</h1>
+    
+    <form method="POST" class="control-panel">
+        <div class="form-group">
+            <label for="data_scenario">Select Observed Data:</label>
+            <select name="data_scenario" id="data_scenario">
+                {% for key, val in scenarios.items() %}
+                    <option value="{{ key }}" {% if key == selected_data %}selected{% endif %}>{{ val.label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="prior_type">Select Prior Knowledge:</label>
+            <select name="prior_type" id="prior_type">
+                {% for key, val in priors.items() %}
+                    <option value="{{ key }}" {% if key == selected_prior %}selected{% endif %}>{{ val.label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <button type="submit">Compute & Overlay</button>
+    </form>
+
+    <div class="metrics">
+        <div class="metric-box">
+            <span style="color:#1f77b4; font-weight:bold;">Frequentist Framework (MLE):</span><br>
+            Point Estimate: <span class="metric-value">θ̂ = {{ theta_mle }}</span><br>
+            Standard Error: <span class="metric-value">SE = {{ mle_se }}</span>
+        </div>
+        <div class="metric-box">
+            <span style="color:#2ca02c; font-weight:bold;">Bayesian Framework (MAP):</span><br>
+            Point Estimate: <span class="metric-value">θ̂ = {{ theta_map }}</span><br>
+            Distribution Shape: <span class="metric-value">Beta Posterior</span>
+        </div>
+    </div>
+
+    <div class="chart-box">
+        <img src="data:image/png;base64,{{ combined_img }}" alt="Unified Framework Comparison Plot">
+    </div>
+
+</body>
+</html>
